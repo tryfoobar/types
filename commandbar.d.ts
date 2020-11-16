@@ -89,7 +89,7 @@ export interface CommandBar {
     readonly open: (input?: string) => void;
     readonly execute: (command: number | string) => void;
     readonly onboard: () => void;
-    readonly isOpen: () => boolean;
+    readonly isOpen: () => boolean | undefined;
 }
 
 declare global {
