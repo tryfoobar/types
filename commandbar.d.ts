@@ -3,8 +3,7 @@ export interface CommandBar {
   readonly addContext: (context: CommandBarContext) => void;
   readonly removeContext: (key: string) => void;
   readonly setContext: (context: CommandBarContext) => void;
-  // K is a type containing types of arguments type K = T1 | T2 | T3
-  readonly addCallback: <K = any>(name: string, callback: CommandBarCallback<K>) => void;
+  readonly addCallback: <T = any, K = any>(name: string, callback: CommandBarCallback<T, K>) => void;
   readonly removeCallback: (name: string) => void;
   readonly addCommand: (command: CommandBarCommandConfig) => void;
   readonly removeCommand: (name: string) => void;
@@ -15,7 +14,7 @@ export interface CommandBar {
   readonly execute: (command: number | string) => void;
   readonly onboard: () => void;
   readonly isOpen: () => boolean | undefined;
-  readonly updateContextSettings: <T>(key: string, settings: CommandBarSearchSettings<T>) => void;
+  readonly updateContextSettings: <T = any>(key: string, settings: CommandBarSearchSettings<T>) => void;
 }
 
 declare global {
@@ -24,9 +23,7 @@ declare global {
   }
   namespace CommandBarTypes {
     // Core primitives
-    // If you need several types to be passed to an object
-    // you can pass union type T | K | N  as a generic?
-    export type CommandBarContext<T> = Record<string, T>;
+    export type CommandBarContext<T = any> = Record<string, T>;
     export type CommandBarCallbackArgs<T> = Record<string, T>;
     export type CommandBarCallback<T, K> = (args: CommandBarCallbackArgs<T>, context: CommandBarContext<K>) => void;
 
@@ -37,7 +34,7 @@ declare global {
     // CommandBar.boot
     export type CommandBarBootArgs = {
       id: string;
-    } & Record<string, string | undefined>; // Any other arguments? Possible to list them or create an interface?
+    } & CommandBarContext;
 
     export enum TemplateTypes {
       callback = "callback",
@@ -104,7 +101,7 @@ declare global {
 
     export type CommandBarCommandConfig = {
       name: string;
-      text: string; // React.ReactNode type possible?
+      text: string;
       template: LinkCommandTemplate | CallbackCommandTemplate;
       shortcut_mac?: string[];
       shortcut_win?: string[];
